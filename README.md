@@ -1,3 +1,3 @@
 # hello-world
-JS database repository
+JS DS repository
 javascripts data structure problems
