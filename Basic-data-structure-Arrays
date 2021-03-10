@@ -45,8 +45,8 @@ and assign the removed elements to their corresponding variables, so that the re
 */
 
 function popShift(arr) {
-  let popped=arr.pop(); // Change this line
   let shifted=arr.shift(); // Change this line
+  let popped=arr.pop(); // Change this line
   return [shifted, popped];
 }
 console.log(popShift(['challenge', 'is', 'not', 'complete']));  //[ 'challenge', 'complete' ]
@@ -217,6 +217,7 @@ let nestedArray = [
 console.log(nestedArray[2][1][0][0][0]);    //deep-est?
 nestedArray[2][1][0][0][0] = 'deeper still';
 console.log(nestedArray[2][1][0][0][0]);    //deeper still
+
 /*We have defined a variable, myNestedArray, set equal to an array. 
 Modify myNestedArray, using any combination of strings, numbers, and booleans for data elements, 
 so that it has exactly five levels of depth (remember, the outer-most array is level 1). 
