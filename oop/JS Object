@@ -53,6 +53,404 @@ function Dog() {
 }
 
 
-/*()
-
+/*(Use a Constructor to Create Objects)
+Use the Dog constructor from the last lesson to create a new instance of Dog, assigning it to a variable hound.
 */
+function Dog() {
+  this.name = "Rupert";
+  this.color = "brown";
+  this.numLegs = 4;
+}
+// Only change code below this line
+let hound = new Dog();
+
+
+/*(Extend Constructors to Receive Arguments)
+Create another Dog constructor. 
+This time, set it up to take the parameters name and color, and have the property numLegs fixed at 4. 
+Then create a new Dog saved in a variable terrier. 
+Pass it two strings as arguments for the name and color properties.
+*/
+function Dog(name, color) {
+  this.name = name;
+  this.color = color;
+  this.numLegs = 4;
+}
+let terrier = new Dog("Sandy", "Brown");
+
+
+/*(Verify an Object's Constructor with instanceof)
+Create a new instance of the House constructor, calling it myHouse and passing a number of bedrooms. 
+Then, use instanceof to verify that it is an instance of House.
+*/
+function House(numBedrooms) {
+  this.numBedrooms = numBedrooms;
+}
+// Only change code below this line
+let myHouse = new House(3);
+myHouse instanceof House;   //true myHouse is instance of House
+
+
+/*(Understand Own Properties)
+Add the own properties of canary to the array ownProps.
+*/
+function Bird(name) {
+  this.name = name;
+  this.numLegs = 2;
+}
+let canary = new Bird("Tweety");
+let ownProps = [];
+// Only change code below this line
+for (let property in canary) {
+  if(canary.hasOwnProperty(property)) {
+    ownProps.push(property);
+  }
+}
+
+
+/*(Use Prototype Properties to Reduce Duplicate Code)
+Since numLegs will probably have the same value for all instances of Dog, you essentially have a duplicated variable numLegs inside each Dog instance.
+This may not be an issue when there are only two instances, but imagine if there are millions of instances. 
+That would be a lot of duplicated variables.
+
+Add a numLegs property to the prototype of Dog
+*/
+function Dog(name) {
+  this.name = name;
+}
+Dog.prototype.numLegs = 4;  //Nearly every object in JavaScript has a prototype property which is part of the constructor function that created it.
+// Only change code above this line
+let beagle = new Dog("Snoopy"); 
+
+/*(Iterate Over All Properties)
+Add all of the own properties of beagle to the array ownProps. Add all of the prototype properties of Dog to the array prototypeProps.
+*/
+function Dog(name) {
+  this.name = name;
+}
+Dog.prototype.numLegs = 4;
+let beagle = new Dog("Snoopy");
+let ownProps = [];
+let prototypeProps = [];
+// Only change code below this line
+for(let property in beagle) {
+  if(beagle.hasOwnProperty(property)) {
+    ownProps.push(property);
+  } else {
+    prototypeProps.push(property);
+  }
+}   //The ownProps array only contains name. The prototypeProps array only contains numLegs.
+
+
+/*(Understand the Constructor Property)
+the constructor property is a reference to the constructor function that created the instance. 
+The advantage of the constructor property is that it's possible to check for this property to find out what kind of object it is
+let duck = new Bird();
+let beagle = new Dog();
+
+console.log(duck.constructor === Bird); 
+console.log(beagle.constructor === Dog);
+
+Write a joinDogFraternity function that takes a candidate parameter and, using the constructor property, 
+return true if the candidate is a Dog, otherwise return false.
+*/
+function Dog(name) {
+  this.name = name;
+}
+// Only change code below this line
+function joinDogFraternity(candidate) {
+  if (candidate.constructor === Dog) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+
+/*(Change the Prototype to a New Object)
+Add the property numLegs and the two methods eat() and describe() to the prototype of Dog by setting the prototype to a new object.
+*/
+function Dog(name) {
+  this.name = name;
+}
+Dog.prototype = {
+  // Only change code below this line
+  numLegs: 4,
+  eat: function() {console.log("nom nom");},
+  describe: function() {console.log("My name is " + this.name);}
+};
+
+
+/*(Remember to Set the Constructor Property when Changing the Prototype)
+There is one crucial side effect of manually setting the prototype to a new object. 
+It erases the constructor property! This property can be used to check which constructor function created the instance, 
+but since the property has been overwritten, 
+it now gives false results:
+
+duck.constructor === Bird;
+duck.constructor === Object;
+duck instanceof Bird;
+
+In order, these expressions would evaluate to false, true, and true.
+
+Define the constructor property on the Dog prototype.
+*/
+function Dog(name) {
+  this.name = name;
+}
+// Only change code below this line
+Dog.prototype = {
+  constructor: Dog,
+  numLegs: 4,
+  eat: function() {
+    console.log("nom nom nom");
+  },
+  describe: function() {
+    console.log("My name is " + this.name);
+  }
+};
+
+
+/*(Understand Where an Object’s Prototype Comes From)
+Just like people inherit genes from their parents, 
+an object inherits its prototype directly from the constructor function that created it. 
+For example, here the Dog constructor creates the beagle object:
+beagle inherits its prototype from the Dog constructor function. You can show this relationship with the isPrototypeOf method.
+
+Use isPrototypeOf to check the prototype of beagle.
+*/
+function Dog(name) {
+  this.name = name;
+}
+let beagle = new Dog("Snoopy");
+// Only change code below this line
+Dog.prototype.isPrototypeOf(beagle);    //true
+
+
+/*(Understand the Prototype Chain)
+All objects in JavaScript (with a few exceptions) have a prototype. Also, an object’s prototype itself is an object.
+The hasOwnProperty method is defined in Object.prototype, which can be accessed by Dog.prototype, which can then be accessed by beagle. 
+This is an example of the prototype chain. In this prototype chain, 
+Dog is the supertype for duck, while beagle is the subtype. 
+Object is a supertype for both Dog and beagle. Object is a supertype for all objects in JavaScript. 
+Therefore, any object can use the hasOwnProperty method.
+
+Modify the code to show the correct prototype chain.
+*/
+function Dog(name) {
+  this.name = name;
+}
+let beagle = new Dog("Snoopy");
+Dog.prototype.isPrototypeOf(beagle);  // yields true
+// Fix the code below so that it evaluates to true
+Object.prototype.isPrototypeOf(Dog.prototype);    //Because a prototype is an object, a prototype can have its own prototype! In this case, the prototype of Dog.prototype is Object.prototype
+
+
+/*(Use Inheritance So You Don't Repeat Yourself [DRY])
+The eat method is repeated in both Cat and Bear. Edit the code in the spirit of DRY by moving the eat method to the Animal supertype.
+*/
+function Cat(name) {
+  this.name = name;
+}
+Cat.prototype = {
+  constructor: Cat,
+};
+
+function Bear(name) {
+  this.name = name;
+}
+Bear.prototype = {
+  constructor: Bear,
+};
+
+function Animal() { }
+Animal.prototype = {
+  constructor: Animal,
+  eat: function() {
+  console.log("nom nom nom");
+  }
+};
+
+
+/*(Inherit Behaviors from a Supertype)
+Use Object.create to make two instances of Animal named duck and beagle.
+*/
+function Animal() { }
+Animal.prototype = {
+  constructor: Animal,
+  eat: function() {
+    console.log("nom nom nom");
+  }
+};
+// Only change code below this line
+let duck = Object.create(Animal.prototype); // Change this line
+let beagle = Object.create(Animal.prototype); // Change this line
+
+
+/*(Set the Child's Prototype to an Instance of the Parent)
+Modify the code so that instances of Dog inherit from Animal.
+*/
+function Animal() { }
+Animal.prototype = {
+  constructor: Animal,
+  eat: function() {
+    console.log("nom nom nom");
+  }
+};
+
+function Dog() { }
+// Only change code below this line
+Dog.prototype = Object.create(Animal.prototype);
+let beagle = new Dog();
+
+
+/*(Reset an Inherited Constructor Property)
+When an object inherits its prototype from another object, it also inherits the supertype's constructor property.
+
+Fix the code so duck.constructor and beagle.constructor return their respective constructors.
+*/
+function Animal() { }
+function Bird() { }
+function Dog() { }
+Bird.prototype = Object.create(Animal.prototype);
+Dog.prototype = Object.create(Animal.prototype);
+// Only change code below this line
+Bird.prototype.constructor = Bird;
+Dog.prototype.constructor = Dog;
+let duck = new Bird();
+let beagle = new Dog();
+
+
+/*(Add Methods After Inheritance)
+Add all necessary code so the Dog object inherits from Animal and the Dog's prototype constructor is set to Dog. 
+Then add a bark() method to the Dog object so that beagle can both eat() and bark(). 
+The bark() method should print Woof! to the console.
+*/
+function Animal() { }
+Animal.prototype.eat = function() { console.log("nom nom nom"); };
+function Dog() { }
+// Only change code below this line
+Dog.prototype = Object.create(Animal.prototype);
+Dog.prototype.constructor = Dog;
+Dog.prototype.bark = function() {
+  console.log("Woof!");
+};    //you want to add behavior that is unique to Dog objects. Here, Dog will get a bark() function. 
+      //Functions are added to Dog's prototype the same way as any constructor function.
+// Only change code above this line
+let beagle = new Dog();
+
+
+/*(Override Inherited Methods)
+It's possible to override an inherited method. 
+It's done the same way - by adding a method to ChildObject.prototype using the same method name as the one to override.
+
+Override the fly() method for Penguin so that it returns the string Alas, this is a flightless bird.
+*/
+function Bird() { }
+Bird.prototype.fly = function() { return "I am flying!"; };
+function Penguin() { }
+Penguin.prototype = Object.create(Bird.prototype);
+Penguin.prototype.constructor = Penguin;
+// Only change code below this line
+Penguin.prototype.fly = function() {
+  return "Alas, this is a flightless bird.";
+};
+// Only change code above this line
+let penguin = new Penguin();
+console.log(penguin.fly());   //Alas, this is a flightless bird.
+
+
+/*(Use a Mixin to Add Common Behavior Between Unrelated Objects)
+behavior is shared through inheritance. However, there are cases when inheritance is not the best solution. 
+Inheritance does not work well for unrelated objects like Bird and Boat. 
+They can both glide, but a Bird is not a type of Boat and vice versa
+For unrelated objects, it's better to use mixins. A mixin allows other objects to use a collection of functions.
+
+Create a mixin named glideMixin that defines a method named glide. Then use the glideMixin to give both bird and boat the ability to glide.
+*/
+let bird = {
+  name: "Donald",
+  numLegs: 2
+};
+let boat = {
+  name: "Warrior",
+  type: "race-boat"
+};
+// Only change code below this line
+let glideMixin = function(obj) {
+  obj.glide = function() {
+  }
+};    //The glideMixin takes any object and gives it the glide method.
+glideMixin(bird); //Here bird and boat are passed into glideMixin, which then assigns the glide function to each object. Now bird and plane can both glide
+glideMixin(boat);
+
+
+/*(Use Closure to Protect Properties Within an Object from Being Modified Externally)
+The simplest way to make this public property private is by creating a variable within the constructor function. 
+This changes the scope of that variable to be within the constructor function versus available globally. 
+This way, the variable can only be accessed and changed by methods also within the constructor function.
+
+Change how weight is declared in the Bird function so it is a private variable. 
+Then, create a method getWeight that returns the value of weight 15.
+*/
+function Bird() {
+  let weight = 15;
+  this.getWeight =function() {
+    return weight;
+  };
+}
+
+
+/*(Understand the Immediately Invoked Function Expression (IIFE))
+the function has no name and is not stored in a variable. 
+The two parentheses () at the end of the function expression cause it to be immediately executed or invoked. 
+This pattern is known as an immediately invoked function expression or IIFE.
+
+Rewrite the function makeNest and remove its call so instead it's an anonymous immediately invoked function expression (IIFE).
+*/
+//function makeNest() {
+//  console.log("A cozy nest is ready");
+//}
+//makeNest();
+(function () {
+  console.log("A cozy nest is ready");
+})();
+
+
+/*(Use an IIFE to Create a Module)
+An immediately invoked function expression (IIFE) is often used to group related functionality into a single object or module.
+
+Create a module named funModule to wrap the two mixins isCuteMixin and singMixin. funModule should return an object.
+*/
+
+/*
+let isCuteMixin = function(obj) {
+  obj.isCute = function() {
+    return true;
+  };
+};
+let singMixin = function(obj) {
+  obj.sing = function() {
+    console.log("Singing to an awesome tune");
+  };
+};
+*/
+
+let funModule = (function() {
+  return {
+    isCuteMixin:function(obj) {
+      obj.isCute = function() {
+        return true;
+      };
+    },
+    singMixin:function(obj) {
+      obj.sing = function() {
+        console.log("Singing to an awesome tune");
+      };
+    }
+  }
+})();
+// funModule.isCuteMixin(obj);
+// obj.isCute();
+// funModule.singMixin(obj);
+// obj.sing();
