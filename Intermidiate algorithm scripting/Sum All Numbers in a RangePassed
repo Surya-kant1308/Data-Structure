@@ -1,0 +1,14 @@
+function sumAll(arr) {
+  let x=arr[0];
+  let y=arr[1];
+  if(x>y){
+    [x,y]=[y,x];
+  }
+  let sum=0;
+  for(let i=x;i<=y;i++) {
+    sum+=i;
+  }
+  return sum;
+}
+
+sumAll([1, 4]);
